@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Markdown转公众号格式工具">
+  <title>Markdown编辑器 - 微信公众号排版工具</title>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/styles.css?v=1.4.0">
+
+  <!-- Highlight.js -->
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-light.min.css">
+
+  <!-- Icon Font (using SVG instead in buttons for now, or CDN font-awesome/remixicon if needed, keeping simple SVGs) -->
+
+  <!-- Favicon -->
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>M</text></svg>">
+</head>
+
+<body>
+
+  <div class="app-layout">
+    <!-- Top Navbar -->
+    <nav class="navbar">
+      <div class="nav-left">
+        <div class="brand">
+          <span class="brand-icon">M</span>
+          <span class="brand-text">Markdown Editor</span>
+        </div>
+      </div>
+      <div class="nav-right">
+        <div id="word-count" class="word-count">
+          <span id="char-count">0</span> 字符 | <span id="word-count-num">0</span> 字
+        </div>
+        <label class="theme-switch">
+          <span>主题:</span>
+          <select id="theme-select" class="nav-select">
+            <!-- Populated by JS -->
+          </select>
+        </label>
+        <button id="view-toggle-btn" class="btn btn-secondary" style="margin-right: 8px;">切换预览</button>
+        <button id="upload-btn" class="btn btn-secondary" style="margin-right: 8px;">导入</button>
+        <button id="export-btn" class="btn btn-secondary" style="margin-right: 8px;">导出HTML</button>
+        <button id="copy-btn" class="btn btn-primary">复制到公众号</button>
+      </div>
+    </nav>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <div class="toolbar-group">
+        <button class="tool-btn" data-action="h1" title="标题 1 (Ctrl+1)">标题1</button>
+        <button class="tool-btn" data-action="h2" title="标题 2 (Ctrl+2)">标题2</button>
+        <button class="tool-btn" data-action="h3" title="标题 3 (Ctrl+3)">标题3</button>
+      </div>
+      <div class="toolbar-divider"></div>
+      <div class="toolbar-group">
+        <button class="tool-btn" data-action="bold" title="粗体 (Ctrl+B)">粗体</button>
+        <button class="tool-btn" data-action="italic" title="斜体 (Ctrl+I)">斜体</button>
+        <button class="tool-btn" data-action="strike" title="删除线">删除线</button>
+      </div>
+      <div class="toolbar-divider"></div>
+      <div class="toolbar-group">
+        <button class="tool-btn" data-action="quote" title="引用">引用</button>
+        <button class="tool-btn" data-action="code" title="行内代码">行内代码</button>
+        <button class="tool-btn" data-action="codeblock" title="代码块 (Ctrl+Shift+K)">代码块</button>
+      </div>
+      <div class="toolbar-divider"></div>
+      <div class="toolbar-group">
+        <button class="tool-btn" data-action="link" title="链接 (Ctrl+K)">链接</button>
+        <button class="tool-btn" data-action="image" title="图片">图片</button>
+        <button class="tool-btn" data-action="hr" title="分割线">分割线</button>
+        <button class="tool-btn" data-action="task" title="任务列表">任务</button>
+      </div>
+    </div>
+
+    <!-- Main Workspace -->
+    <div class="workspace">
+      <!-- Editor Pane -->
+      <div class="pane editor-pane">
+        <textarea id="markdown-editor" spellcheck="false" placeholder="在此输入 Markdown 内容..."></textarea>
+      </div>
+
+      <!-- Preview Pane -->
+      <div class="pane preview-pane">
+        <div class="mobile-mockup">
+          <div class="mobile-header">
+            <span class="mobile-time">12:00</span>
+            <div class="mobile-notch"></div>
+            <span class="mobile-battery">🔋</span>
+          </div>
+          <div class="mobile-bar">
+            <span>🔙</span>
+            <span>Markdown Editor</span>
+            <span>•••</span>
+          </div>
+          <div class="mobile-content-wrapper">
+            <div id="preview-content" class="preview-content"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification -->
+  <div id="notification" class="notification"></div>
+  <input type="file" id="file-input" hidden>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.0/marked.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script src="js/themes.js?v=1.4.0"></script>
+  <script src="js/converter.js?v=1.4.0"></script>
+  <script src="js/editor.js?v=1.4.0"></script>
+  <script src="js/app.js?v=1.4.0"></script>
+</body>
+
+</html>
