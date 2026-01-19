@@ -382,17 +382,21 @@ ${html}
     editorEl.addEventListener('input', debounce(updatePreview, 100));
 
     // View Toggle Logic
-    const toggleBtn = document.getElementById('view-toggle-btn');
+    const mobileBtn = document.getElementById('view-mobile-btn');
+    const pcBtn = document.getElementById('view-pc-btn');
     const previewContainer = document.querySelector('.mobile-mockup');
 
-    if (toggleBtn && previewContainer) {
-        toggleBtn.addEventListener('click', () => {
-            const isPc = previewContainer.classList.toggle('pc-view');
-            if (isPc) {
-                toggleBtn.classList.add('active');
-            } else {
-                toggleBtn.classList.remove('active');
-            }
+    if (mobileBtn && pcBtn && previewContainer) {
+        mobileBtn.addEventListener('click', () => {
+            previewContainer.classList.remove('pc-view');
+            mobileBtn.classList.add('active');
+            pcBtn.classList.remove('active');
+        });
+
+        pcBtn.addEventListener('click', () => {
+            previewContainer.classList.add('pc-view');
+            pcBtn.classList.add('active');
+            mobileBtn.classList.remove('active');
         });
     }
 
