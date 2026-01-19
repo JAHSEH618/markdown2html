@@ -69,13 +69,33 @@ class MarkdownConverter {
         };
 
         // Code block - Matching markdown.com.cn/editor styling exactly
-        renderer.code = function (code, language) {
+        // Note: marked.js v12 uses token objects, but some versions use (code, language) params
+        renderer.code = function (codeOrToken, language) {
+            // Handle both old API (code, language) and new API (token object)
+            let code, lang;
+            if (typeof codeOrToken === 'object' && codeOrToken !== null) {
+                // New API: token object with .text and .lang properties
+                code = codeOrToken.text || '';
+                lang = codeOrToken.lang || '';
+            } else {
+                // Old API: separate parameters
+                code = codeOrToken || '';
+                lang = language || '';
+            }
+
+            // Special handling for Mermaid diagrams
+            if (lang && lang.toLowerCase() === 'mermaid') {
+                // Return a div with mermaid class - app.js will render and convert to PNG
+                // Note: Don't escape the code here, mermaid needs the raw code
+                return `<div class="mermaid" style="background: #fff; padding: 10px; margin: 10px 0; text-align: center;">${code}</div>\n`;
+            }
+
             let highlighted = code;
 
             if (typeof hljs !== 'undefined') {
                 try {
-                    if (language && hljs.getLanguage(language)) {
-                        highlighted = hljs.highlight(code, { language }).value;
+                    if (lang && hljs.getLanguage(lang)) {
+                        highlighted = hljs.highlight(code, { language: lang }).value;
                     } else {
                         highlighted = hljs.highlightAuto(code).value;
                     }

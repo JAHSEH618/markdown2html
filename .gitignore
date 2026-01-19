@@ -1,2 +1,5 @@
 *.log
 .DS_Store
+server.pid
+server.log
+.idea

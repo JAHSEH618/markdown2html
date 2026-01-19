@@ -3,6 +3,143 @@
  * Version 1.4.0
  */
 
+/**
+ * Convert SVG string to PNG data URL
+ * @param {string} svgString - The SVG markup string
+ * @returns {Promise<string>} - A promise that resolves to a PNG data URL
+ */
+async function convertSvgToPng(svgString) {
+    return new Promise((resolve, reject) => {
+        // Create a temporary container to measure the exact bounding box of the SVG content
+        // This is necessary because Mermaid's default viewBox calculation might be slightly off
+        // or exclude some overflow content (like text labels).
+        const container = document.createElement('div');
+        container.style.position = 'absolute';
+        container.style.top = '-9999px';
+        container.style.left = '-9999px';
+        container.style.visibility = 'hidden'; // Render it but hide it
+        container.innerHTML = svgString;
+        document.body.appendChild(container);
+
+        const svgElement = container.querySelector('svg');
+        if (!svgElement) {
+            document.body.removeChild(container);
+            reject(new Error('Invalid SVG'));
+            return;
+        }
+
+        // Get the exact bounding box of the content
+        // This accounts for all elements, including those translated outside the original viewBox
+        const bbox = svgElement.getBBox();
+
+        // Remove container after measurement
+        document.body.removeChild(container);
+
+        // Calculate new dimensions with extra generous padding to prevent any text clipping
+        // Emojis often render wider than reported by getBBox in some environments
+        const paddingX = 50;
+        const paddingY = 20;
+        const x = bbox.x - paddingX;
+        const y = bbox.y - paddingY;
+        const width = bbox.width + paddingX * 2;
+        const height = bbox.height + paddingY * 2;
+
+        // Parse the SVG string again to modify it for export
+        // (We manipulate a fresh DOM parser instance to avoid side effects from the previous one)
+        const parser = new DOMParser();
+        const svgDoc = parser.parseFromString(svgString, 'image/svg+xml');
+        const exportSvg = svgDoc.querySelector('svg');
+
+        // Set the new viewBox to match the exact content bounds
+        exportSvg.setAttribute('viewBox', `${x} ${y} ${width} ${height}`);
+
+        // Set physical size to match content size
+        exportSvg.setAttribute('width', width);
+        exportSvg.setAttribute('height', height);
+
+        // Ensure no overflow clipping
+        exportSvg.style.overflow = 'visible';
+
+        // Add white background rect
+        // It must cover the entire new viewBox area
+        const bgRect = svgDoc.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        bgRect.setAttribute('x', x);
+        bgRect.setAttribute('y', y);
+        bgRect.setAttribute('width', width);
+        bgRect.setAttribute('height', height);
+        bgRect.setAttribute('fill', 'white');
+
+        // Insert background as the first child
+        if (exportSvg.firstChild) {
+            exportSvg.insertBefore(bgRect, exportSvg.firstChild);
+        } else {
+            exportSvg.appendChild(bgRect);
+        }
+
+        // Serialize the optimized SVG
+        const serializer = new XMLSerializer();
+        const modifiedSvgString = serializer.serializeToString(svgDoc);
+
+        // Create image for Canvas drawing
+        const img = new Image();
+        const base64Svg = btoa(unescape(encodeURIComponent(modifiedSvgString)));
+        const dataUrl = `data:image/svg+xml;base64,${base64Svg}`;
+
+        img.onload = () => {
+            const scale = 3; // High resolution
+            const canvas = document.createElement('canvas');
+            canvas.width = width * scale;
+            canvas.height = height * scale;
+
+            const ctx = canvas.getContext('2d');
+
+            // Fill background white
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw image filling the canvas
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+            const pngDataUrl = canvas.toDataURL('image/png', 1.0);
+            resolve(pngDataUrl);
+        };
+
+        img.onerror = (err) => {
+            console.error('Failed to load SVG image for conversion', err);
+            reject(err);
+        };
+
+        img.src = dataUrl;
+    });
+}
+
+// Initialize Mermaid with proper configuration for complex diagrams
+if (typeof mermaid !== 'undefined') {
+    mermaid.initialize({
+        startOnLoad: false,  // We manually render
+        theme: 'default',
+        securityLevel: 'loose',  // Allow HTML in labels (needed for <br/> etc.)
+        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+        flowchart: {
+            useMaxWidth: true,
+            htmlLabels: true,
+            curve: 'basis'
+        },
+        sequence: {
+            useMaxWidth: true
+        },
+        gantt: {
+            useMaxWidth: true
+        },
+        stateDiagram: {
+            useMaxWidth: true
+        },
+        suppressErrorRendering: false,  // Show errors for debugging
+        logLevel: 'error'
+    });
+    console.log('Mermaid initialized with configuration');
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     // DOM Elements
     const editorEl = document.getElementById('markdown-editor');
@@ -92,34 +229,45 @@ document.addEventListener('DOMContentLoaded', function () {
         // Auto-save
         autoSave();
 
-        // Re-render Mermaid diagrams using the render() API for better control
+        // Re-render Mermaid diagrams and convert to PNG for better compatibility
         if (typeof mermaid !== 'undefined') {
             const mermaidElements = previewEl.querySelectorAll('.mermaid');
+            console.log(`Found ${mermaidElements.length} mermaid elements to render`);
 
             for (let i = 0; i < mermaidElements.length; i++) {
                 const el = mermaidElements[i];
-                const code = el.textContent || el.innerText;
+                // Get and clean the code
+                let code = el.textContent || el.innerText;
+                code = code.trim();
+
+                // Skip empty code blocks
+                if (!code) {
+                    console.warn(`Mermaid element ${i} is empty, skipping`);
+                    continue;
+                }
 
                 // Generate unique ID for each diagram
                 const id = `mermaid-diagram-${Date.now()}-${i}`;
+                console.log(`Rendering mermaid diagram ${i}:`, code.substring(0, 100) + '...');
 
                 try {
                     // Use mermaid.render() for explicit control
                     const { svg } = await mermaid.render(id, code);
+                    console.log(`Mermaid diagram ${i} rendered successfully`);
 
-                    // Inject white background into SVG for WeChat compatibility
-                    let modifiedSvg = svg;
-                    const svgMatch = modifiedSvg.match(/<svg[^>]*>/);
-                    if (svgMatch) {
-                        const bgRect = '<rect width="100%" height="100%" fill="white"/>';
-                        modifiedSvg = modifiedSvg.replace(svgMatch[0], svgMatch[0] + bgRect);
-                    }
+                    // Convert SVG to PNG
+                    const pngDataUrl = await convertSvgToPng(svg);
 
-                    // Wrap in container with white background as fallback
-                    el.innerHTML = `<div style="background: #ffffff; padding: 10px; display: inline-block;">${modifiedSvg}</div>`;
+                    // Replace the mermaid element with an img tag
+                    el.innerHTML = `<img src="${pngDataUrl}" alt="Mermaid Diagram" style="max-width: 100%; height: auto; display: block; margin: 10px auto;">`;
                 } catch (err) {
-                    console.error('Mermaid render error:', err);
-                    el.innerHTML = `<div style="color: red; padding: 10px; border: 1px solid red; background: #fff0f0;">Mermaid 语法错误: ${err.message || err}</div>`;
+                    console.error(`Mermaid render error for diagram ${i}:`, err);
+                    console.error('Failed code:', code);
+                    const shortCode = code.substring(0, 50).replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                    el.innerHTML = `<div style="color: red; padding: 10px; border: 1px solid red; background: #fff0f0;">
+                        <strong>Mermaid 语法错误:</strong> ${err.message || err}<br/>
+                        <small style="color: #666;">代码片段: ${shortCode}...</small>
+                    </div>`;
                 }
             }
         }
