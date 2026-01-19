@@ -3,12 +3,12 @@
 # 📝 Markdown to WeChat Editor
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.4.0-green.svg)]()
+[![Version](https://img.shields.io/badge/version-1.5.2-green.svg)]()
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)]()
 
 **一个专注于微信公众号排版的 Markdown 编辑器**
 
-提供优雅的写作体验、实时手机预览和一键复制到公众号功能
+提供沉浸式的手绘书籍写作体验、实时手机/PC预览和一键复制到公众号功能
 
 [功能特点](#-功能特点) •
 [快速开始](#-快速开始) •
@@ -28,10 +28,18 @@
 | 功能 | 描述 |
 |------|------|
 | **分栏编辑** | 左侧 Markdown 编辑，右侧实时预览，所见即所得 |
-| **手机模拟** | 右侧预览区域模拟 iPhone 屏幕，真实还原公众号阅读体验 |
+| **双模预览** | 模拟 iPhone 和 PC 屏幕，支持不同设备视角的完美预览 |
+| **手绘风格** | 独特的"Sketchy Book"手绘书籍 UI 设计，带来沉浸式写作体验 |
 | **一键复制** | 特殊的复制机制，确保粘贴到公众号后台时样式不丢失 |
 | **链接转脚注** | 自动将外部链接转换为文末脚注，符合公众号规范 |
 | **多主题切换** | 内置 15+ 精美主题，一键切换风格 |
+
+### 🚀 v1.5.x 新增功能
+
+- 🎨 **手绘 UI 重构** - 全新 Sketchy Book 设计语言，温暖治愈
+- 📱 **双端预览** - 新增 PC/Mobile 预览切换，带精美设备边框
+- 🖼️ **高清 Mermaid** - 完美的 Mermaid 图表 SVG 转 PNG 导出，解决文字截断问题
+- ⚡️ **性能优化** - 更流畅的编辑体验
 
 ### 🚀 v1.4.0 新增功能
 
@@ -93,7 +101,7 @@ chmod +x start.sh stop.sh
 
 3. **预览调整**
    - 右侧实时预览渲染效果
-   - 点击「切换预览」在手机/PC视图间切换
+   - 点击顶部「切换预览」按钮，在 📱 手机 / 💻 电脑 视图间切换
 
 4. **选择主题**
    - 从下拉菜单选择合适的主题风格
@@ -144,7 +152,6 @@ chmod +x start.sh stop.sh
 | 暗夜 | 深色背景，护眼模式 |
 | 优雅 | 衬线字体，书籍质感 |
 | 极简 | 极简风格，专注内容 |
-| 经典 | 复刻 markdown.com.cn 风格 |
 
 ### 技术主题
 
