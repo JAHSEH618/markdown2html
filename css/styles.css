@@ -1,20 +1,39 @@
 /* ========================================
-   Markdown to WeChat Converter - Clean Style
-   Version 1.4.0
-   Inspiration: markdown.com.cn
+   Markdown to WeChat Converter - Sketch & Book Style
+   Version 1.5.2
+   Theme: Parchment & Ink / Sketchy
 ======================================== */
 
 :root {
-  --primary-color: #07c160;
-  /* WeChat Green */
-  --primary-hover: #06ad56;
-  --bg-color: #f7f7f7;
-  --header-height: 60px;
-  --toolbar-height: 48px;
-  --border-color: #e0e0e0;
-  --text-primary: #333;
-  --text-secondary: #666;
-  --white: #ffffff;
+  /* Book/Parchment Palette */
+  --bg-color: #Fdfbf7;
+  /* Warm Parchment */
+  --paper-color: #fcfaf2;
+  /* Lighter parchment for panels */
+  --primary-color: #5D4037;
+  /* Ink Brown */
+  --primary-hover: #3E2723;
+  /* Darker Ink */
+  --secondary-color: #8D6E63;
+  /* Lighter Ink */
+  --text-primary: #3E2723;
+  /* Dark Ink text */
+  --text-secondary: #5D4037;
+  /* Lighter Ink text */
+  --accent-color: #A1887F;
+  --border-color: #8D6E63;
+  /* Ink border */
+  --white: #fffefb;
+
+  /* Dimensions & Spacing */
+  --header-height: 64px;
+  --toolbar-height: 52px;
+
+  /* Sketchy Borders */
+  --border-radius-base: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  --border-radius-small: 2px 2px 2px 2px / 2px 2px 2px 2px;
+  /* More subtle for small items */
+  --border-width: 2px;
 }
 
 * {
@@ -24,8 +43,12 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: 'Source Serif 4', 'Georgia', serif;
   background-color: var(--bg-color);
+  background-image:
+    linear-gradient(to right, rgba(93, 64, 55, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(93, 64, 55, 0.05) 1px, transparent 1px);
+  background-size: 20px 20px;
   color: var(--text-primary);
   height: 100vh;
   overflow: hidden;
@@ -41,33 +64,41 @@ body {
 /* Navbar */
 .navbar {
   height: var(--header-height);
-  background: var(--white);
-  border-bottom: 1px solid var(--border-color);
+  background: var(--paper-color);
+  border-bottom: var(--border-width) solid var(--border-color);
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 24px;
+  box-shadow: 0 2px 10px rgba(62, 39, 35, 0.05);
+  font-family: 'Patrick Hand', cursive;
 }
 
 .brand {
   display: flex;
   align-items: center;
   gap: 12px;
-  font-weight: 600;
-  font-size: 18px;
-  color: #333;
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--primary-color);
+  letter-spacing: 0.5px;
 }
 
 .brand-icon {
   background: var(--primary-color);
-  color: white;
-  width: 32px;
-  height: 32px;
-  border-radius: 6px;
+  color: #fff;
+  /* Paper white text on ink */
+  width: 36px;
+  height: 36px;
+  border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+  /* Blob shape */
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: bold;
+  font-size: 20px;
+  font-family: 'Patrick Hand', cursive;
+  box-shadow: 2px 3px 0px rgba(62, 39, 35, 0.2);
 }
 
 .nav-right {
@@ -78,112 +109,142 @@ body {
 
 /* Word Count */
 .word-count {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--text-secondary);
-  padding: 4px 12px;
-  background: #f5f5f5;
-  border-radius: 4px;
+  padding: 6px 14px;
+  background: rgba(141, 110, 99, 0.1);
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
   white-space: nowrap;
+  font-family: 'Patrick Hand', cursive;
+  border: 1px dashed var(--border-color);
 }
 
 .theme-switch {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 14px;
-  color: var(--text-secondary);
+  font-size: 16px;
+  color: var(--text-primary);
+  font-family: 'Patrick Hand', cursive;
 }
 
 .nav-select {
-  padding: 4px 8px;
-  border: 1px solid var(--border-color);
-  border-radius: 4px;
-  font-size: 14px;
+  padding: 4px 12px;
+  border: 2px solid var(--border-color);
+  background-color: var(--white);
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  font-size: 15px;
   outline: none;
+  font-family: 'Patrick Hand', cursive;
+  color: var(--primary-color);
+  cursor: pointer;
 }
 
+.nav-select:focus {
+  border-color: var(--primary-hover);
+}
+
+/* Buttons */
 .btn {
-  border: none;
-  border-radius: 4px;
-  padding: 8px 16px;
-  font-size: 14px;
+  border: 2px solid var(--border-color);
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  padding: 8px 18px;
+  font-size: 16px;
   cursor: pointer;
   transition: all 0.2s;
-  font-weight: 500;
+  font-weight: 600;
+  font-family: 'Patrick Hand', cursive;
+  position: relative;
+  overflow: visible;
 }
 
 .btn-primary {
   background-color: var(--primary-color);
-  color: white;
+  color: #fff;
+  border-color: var(--primary-color);
+  box-shadow: 2px 2px 0px rgba(62, 39, 35, 0.3);
 }
 
 .btn-primary:active {
-  background-color: var(--primary-hover);
-  transform: translateY(1px);
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px rgba(62, 39, 35, 0.3);
 }
 
 .btn-secondary {
-  background-color: #f5f5f5;
-  color: var(--text-primary);
-  border: 1px solid var(--border-color);
+  background-color: var(--white);
+  color: var(--primary-color);
+  border-color: var(--border-color);
+  box-shadow: 2px 2px 0px rgba(141, 110, 99, 0.2);
 }
 
 .btn-secondary:hover {
-  background-color: #e9e9e9;
+  background-color: rgba(141, 110, 99, 0.1);
+  transform: rotate(-1deg);
 }
 
 .btn-secondary:active {
-  background-color: #ddd;
+  transform: translate(1px, 1px) rotate(-1deg);
+  box-shadow: 1px 1px 0px rgba(141, 110, 99, 0.2);
 }
 
 /* Toolbar */
 .toolbar {
   height: var(--toolbar-height);
-  background: #fafafa;
-  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-color);
+  border-bottom: var(--border-width) solid var(--border-color);
   display: flex;
   align-items: center;
   padding: 0 16px;
   gap: 12px;
+  font-family: 'Patrick Hand', cursive;
 }
 
 .toolbar-group {
   display: flex;
-  gap: 4px;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.5);
+  padding: 4px;
+  border-radius: 10px;
+  border: 1px dashed rgba(141, 110, 99, 0.3);
 }
 
 .tool-btn {
   background: transparent;
   border: 1px solid transparent;
-  width: auto;
   min-width: 32px;
   padding: 0 8px;
   height: 32px;
-  border-radius: 4px;
+  border-radius: 3px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #555;
+  color: var(--text-secondary);
   cursor: pointer;
-  font-family: inherit;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
+  transition: all 0.2s;
+  font-family: 'Patrick Hand', cursive;
 }
 
 .tool-btn:hover {
-  background: #e9e9e9;
-  color: #000;
+  background: rgba(141, 110, 99, 0.1);
+  color: var(--primary-color);
+  transform: scale(1.1) rotate(2deg);
 }
 
 .tool-btn:active {
-  background: #ddd;
+  background: rgba(141, 110, 99, 0.2);
+  transform: scale(0.95);
 }
 
 .toolbar-divider {
-  width: 1px;
-  height: 20px;
-  background: #e0e0e0;
+  width: 2px;
+  height: 24px;
+  background: var(--border-color);
   margin: 0 4px;
+  border-radius: 2px;
+  opacity: 0.5;
+  transform: rotate(5deg);
 }
 
 /* Workspace (Split View) */
@@ -191,6 +252,7 @@ body {
   flex: 1;
   display: flex;
   overflow: hidden;
+  background-color: var(--bg-color);
 }
 
 .pane {
@@ -201,83 +263,129 @@ body {
 }
 
 .editor-pane {
-  background: var(--white);
-  border-right: 1px solid var(--border-color);
+  background: var(--paper-color);
+  border-right: var(--border-width) solid var(--border-color);
+  position: relative;
+}
+
+/* Paper texture or lines for editor */
+.editor-pane::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  background: linear-gradient(rgba(141, 110, 99, 0.05) 1px, transparent 1px);
+  background-size: 100% 28.8px;
+  /* Match line height approx */
+  opacity: 0.5;
+  z-index: 0;
 }
 
 .preview-pane {
-  background: #f7f7f8;
+  background: var(--bg-color);
+  /* Patterned bg from body shows through or explicitly set */
   padding: 40px;
   align-items: center;
   overflow-y: auto;
+  border-left: 1px solid rgba(255, 255, 255, 0.5);
+  /* Highlight */
 }
 
 /* Editor */
 #markdown-editor {
   flex: 1;
   width: 100%;
-  padding: 24px;
+  padding: 24px 30px;
   border: none;
   resize: none;
   outline: none;
-  font-size: 15px;
+  font-size: 16px;
   line-height: 1.8;
-  font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
-  color: #24292e;
+  font-family: 'Courier Prime', 'Courier New', monospace;
+  /* Monospace for code/markdown editing */
+  color: var(--text-primary);
+  background: transparent;
+  z-index: 1;
 }
 
-/* Mobile Preview Mockup */
+/* Mobile Preview Mockup - Sketchy Phone */
 .mobile-mockup {
   width: 375px;
   min-width: 375px;
   height: 812px;
   min-height: 812px;
   background: #fff;
-  border-radius: 36px;
-  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15), 0 0 0 10px #e0e0e0 inset;
+  border-radius: 40px;
+  box-shadow:
+    10px 15px 0px rgba(62, 39, 35, 0.1),
+    /* Hard sketched shadow */
+    0 0 0 4px var(--primary-color) inset,
+    /* Inner Ink Line */
+    0 0 0 8px var(--bg-color) inset;
+  /* Gap */
   position: relative;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  border: 8px solid #1a1a1a;
-  /* Bezel */
+  border: 4px solid var(--primary-color);
+  transform: rotate(-0.5deg);
 }
 
 .mobile-header {
-  height: 44px;
+  height: 48px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 20px;
-  font-size: 12px;
+  padding: 0 24px;
+  font-size: 13px;
   font-weight: 600;
-  color: #000000;
+  color: var(--primary-color);
   background: #fff;
   z-index: 10;
+  border-bottom: 2px dashed rgba(141, 110, 99, 0.2);
+  font-family: 'Patrick Hand', cursive;
 }
 
 .mobile-notch {
-  width: 120px;
-  height: 24px;
-  background: #1a1a1a;
-  border-radius: 0 0 12px 12px;
+  width: 140px;
+  height: 28px;
+  background: var(--primary-color);
+  border-radius: 0 0 15px 15px;
   position: absolute;
   top: 0;
   left: 50%;
   transform: translateX(-50%);
+  z-index: 20;
+}
+
+/* Sketchy reflection on notch */
+.mobile-notch::after {
+  content: '';
+  position: absolute;
+  top: 6px;
+  right: 12px;
+  width: 8px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
 }
 
 .mobile-bar {
-  height: 44px;
+  height: 48px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 16px;
-  font-size: 16px;
-  font-weight: 500;
-  border-bottom: 1px solid #eee;
+  font-size: 17px;
+  font-weight: 600;
+  border-bottom: 1px solid rgba(141, 110, 99, 0.1);
   background: #fff;
   z-index: 10;
+  color: var(--primary-color);
+  font-family: 'Source Serif 4', serif;
 }
 
 .mobile-content-wrapper {
@@ -289,11 +397,11 @@ body {
 
 /* Hide scrollbar in mockup but allow scroll */
 .mobile-content-wrapper::-webkit-scrollbar {
-  width: 4px;
+  width: 6px;
 }
 
 .mobile-content-wrapper::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(141, 110, 99, 0.3);
   border-radius: 4px;
 }
 
@@ -302,27 +410,31 @@ body {
   position: fixed;
   top: 80px;
   right: 20px;
-  padding: 12px 24px;
-  background: #333;
+  padding: 14px 28px;
+  background: var(--primary-color);
   color: #fff;
-  border-radius: 4px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
   transform: translateX(120%);
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 1000;
-  font-size: 14px;
+  font-size: 16px;
+  font-family: 'Patrick Hand', cursive;
 }
 
 .notification.show {
-  transform: translateX(0);
+  transform: translateX(0) rotate(-2deg);
 }
 
 .notification.error {
-  background: #e53e3e;
+  background: #C62828;
+  border: 2px solid #8E0000;
 }
 
 .notification.success {
-  background: var(--primary-color);
+  background: #2E7D32;
+  /* Sketchy Green */
+  border: 2px solid #1B5E20;
 }
 
 @media (max-width: 900px) {
@@ -332,7 +444,6 @@ body {
 
   .preview-pane {
     display: none;
-    /* Hide preview on small screens for now or stack */
   }
 
   .editor-pane {
@@ -357,18 +468,18 @@ body {
 /* View Controls */
 .view-controls {
   display: flex;
-  background: #f0f0f0;
-  padding: 4px;
+  background: transparent;
+  padding: 2px;
   border-radius: 8px;
-  gap: 4px;
+  gap: 6px;
 }
 
 .btn-icon {
   background: transparent;
-  border: none;
+  border: 2px solid transparent;
   padding: 6px;
-  border-radius: 6px;
-  color: #666;
+  border-radius: 8px;
+  color: var(--text-secondary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -377,22 +488,26 @@ body {
 }
 
 .btn-icon:hover {
-  background: rgba(0, 0, 0, 0.05);
-  color: #333;
+  background: rgba(141, 110, 99, 0.1);
+  color: var(--primary-color);
+  transform: scale(1.1);
 }
 
 .btn-icon.active {
-  background: #fff;
+  background: var(--white);
   color: var(--primary-color);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  font-weight: bold;
+  border: 2px solid var(--border-color);
+  box-shadow: 1px 1px 0 rgba(141, 110, 99, 0.2);
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
 }
 
 .btn-icon svg {
   display: block;
+  stroke-width: 0.5px;
+  /* Make icons look a bit daintier */
 }
 
-/* PC Preview Mode (Desktop Monitor) */
+/* PC Preview Mode (Sketchy Monitor) */
 .mobile-mockup.pc-view {
   width: 900px;
   height: 600px;
@@ -400,31 +515,31 @@ body {
   max-height: 90vh;
   min-width: unset;
   min-height: unset;
-  border: 16px solid #1a1a1a;
-  border-bottom-width: 24px;
-  border-radius: 12px;
+  border: 12px solid var(--primary-color);
+  border-bottom-width: 20px;
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
   background: #fff;
   box-shadow:
-    0 0 0 2px #333,
-    /* Outer bezel edge */
-    0 20px 50px rgba(0, 0, 0, 0.2);
-  /* Shadow */
+    6px 8px 0 rgba(62, 39, 35, 0.2),
+    inset 0 0 20px rgba(0, 0, 0, 0.05);
   margin: 0 auto;
   position: relative;
+  transform: rotate(0.5deg);
 }
 
 /* Monitor Stand */
 .mobile-mockup.pc-view::after {
   content: '';
   position: absolute;
-  bottom: -60px;
+  bottom: -50px;
   left: 50%;
   transform: translateX(-50%);
-  width: 160px;
+  width: 140px;
   height: 40px;
-  background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 100%);
+  background: var(--primary-color);
   z-index: -1;
-  clip-path: polygon(20% 0, 80% 0, 100% 100%, 0% 100%);
+  clip-path: polygon(15% 0, 85% 0, 100% 100%, 0% 100%);
+  border-radius: 4px;
 }
 
 .mobile-mockup.pc-view::before {
@@ -432,14 +547,13 @@ body {
   position: absolute;
   bottom: -60px;
   left: 50%;
-  transform: translateX(-50%);
-  width: 240px;
+  transform: translateX(-50%) skewX(-10deg);
+  width: 200px;
   height: 12px;
-  background: #1a1a1a;
-  border-radius: 6px;
+  background: var(--primary-color);
+  border-radius: 10px;
   z-index: -1;
-  margin-bottom: -10px;
-  /* Base of stand */
+  box-shadow: 4px 4px 0 rgba(62, 39, 35, 0.2);
 }
 
 /* Hide Mobile Elements in PC View */
@@ -454,13 +568,11 @@ body {
   height: 100%;
   overflow-y: auto;
   border-radius: 4px;
-  /* Inner screen radius */
 }
 
 .mobile-mockup.pc-view .preview-content {
   padding: 40px 60px;
   max-width: 800px;
-  /* Readable width */
   margin: 0 auto;
   min-height: 100%;
 }
@@ -471,31 +583,41 @@ body {
 }
 
 .mobile-mockup.pc-view .mobile-content-wrapper::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: transparent;
 }
 
 .mobile-mockup.pc-view .mobile-content-wrapper::-webkit-scrollbar-thumb {
-  background: #c1c1c1;
-  border-radius: 4px;
-}
-
-.mobile-mockup.pc-view .mobile-content-wrapper::-webkit-scrollbar-thumb:hover {
-  background: #a8a8a8;
+  background: var(--secondary-color);
+  border-radius: 10px;
+  border: 2px solid #fff;
 }
 
 /* Task List Checkbox Styles (for preview) */
 .task-checkbox {
   display: inline-block;
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   margin-right: 8px;
   vertical-align: middle;
-  border: 2px solid #d9d9d9;
-  border-radius: 3px;
+  border: 2px solid var(--primary-color);
+  border-radius: 6px 3px 6px 4px / 4px 6px 3px 6px;
+  /* Sketchy */
   background: #fff;
+  cursor: pointer;
 }
 
 .task-checkbox.checked {
-  border-color: var(--primary-color);
   background: var(--primary-color);
+  position: relative;
+}
+
+.task-checkbox.checked::after {
+  content: '✓';
+  color: #fff;
+  position: absolute;
+  top: -2px;
+  left: 1px;
+  font-size: 14px;
+  font-family: 'Patrick Hand', cursive;
+  font-weight: bold;
 }
