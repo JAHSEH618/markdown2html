@@ -2,4 +2,11 @@
 .DS_Store
 server.pid
 server.log
-.idea
+.idea__pycache__/
+*.pyc
+.idea/
+*.iml
+.env
+*.db
+.vscode/
+__pycache__/
